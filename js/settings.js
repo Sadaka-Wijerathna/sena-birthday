@@ -20,13 +20,13 @@ let settings = {
         },
         {
             image: './image/photos/p1.jpeg',
-            content: 'Happy Birthday Senadi 💗'
+            content: 'Happy Birthday Bbii 💗'
         },
 
         // --- Leaf 2 ---
         {
             image: './image/photos/p2.jpeg',
-            content: 'Happy Birthday Senadi 💗'
+            content: 'Happy Birthday Bbii 💗'
         },
         {
             image: './image/photos/p3.jpeg',
@@ -66,7 +66,7 @@ let settings = {
         // --- Leaf 6 (back cover) ---
         {
             image: './image/photos/p10.jpeg',
-            content: 'Here’s to you, Senadi — forever in my heart. ❤️'
+            content: 'Here’s to you, Bbii — forever in my heart. ❤️'
         },
         {
             image: './image/book-cover.png',
@@ -399,13 +399,13 @@ function initializeDefaultSettings() {
         },
         {
             image: './image/photos/p1.jpeg',
-            content: 'Happy Birthday Senadi 💗'
+            content: 'Happy Birthday Bbii 💗'
         },
 
         // --- Leaf 2 ---
         {
             image: './image/photos/p2.jpeg',
-            content: 'Happy Birthday Senadi 💗'
+            content: 'Happy Birthday Bbii 💗'
         },
         {
             image: './image/photos/p3.jpeg',
@@ -445,7 +445,7 @@ function initializeDefaultSettings() {
         // --- Leaf 6 (back cover) ---
         {
             image: './image/photos/p10.jpeg',
-            content: 'Here’s to you, Senadi — forever in my heart. ❤️'
+            content: 'Here’s to you, Bbii — forever in my heart. ❤️'
         },
         {
             image: './image/book-cover.png',
