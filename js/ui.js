@@ -115,6 +115,9 @@ function startWebsite() {
     if (typeof resetWebsiteState === 'function') {
         resetWebsiteState();
     }
+    if (typeof tryAutoPlayMusic === 'function') {
+        tryAutoPlayMusic();
+    }
     S.init(); // luôn chạy lại hiệu ứng
     S.initialized = true;
 }
@@ -1454,38 +1457,82 @@ const musicControl = document.getElementById('musicControl');
 const birthdayAudio = document.getElementById('birthdayAudio');
 let isPlaying = false;
 
-birthdayAudio.volume = 0.6;
+if (birthdayAudio) {
+    birthdayAudio.volume = 0.6;
+}
 
-function toggleMusic() {
-    if (isPlaying) {
-        birthdayAudio.pause();
-        musicControl.innerHTML = '▶';
-        musicControl.classList.remove('playing');
-        musicControl.title = 'Play Music';
-        isPlaying = false;
-    } else {
-        birthdayAudio.play().then(() => {
+function updateMusicButtonState(playing) {
+    isPlaying = playing;
+    if (musicControl) {
+        if (playing) {
             musicControl.innerHTML = '⏸';
             musicControl.classList.add('playing');
             musicControl.title = 'Pause Music';
-            isPlaying = true;
+        } else {
+            musicControl.innerHTML = '▶';
+            musicControl.classList.remove('playing');
+            musicControl.title = 'Play Music';
+        }
+    }
+}
+
+function toggleMusic() {
+    if (!birthdayAudio) return;
+    if (isPlaying) {
+        birthdayAudio.pause();
+        updateMusicButtonState(false);
+    } else {
+        birthdayAudio.play().then(() => {
+            updateMusicButtonState(true);
         }).catch(error => {
-            // alert('Click to play music!');
+            console.log('Play blocked:', error);
         });
     }
 }
 
-musicControl.addEventListener('click', toggleMusic);
+function tryAutoPlayMusic() {
+    if (!birthdayAudio || isPlaying) return;
+    birthdayAudio.play().then(() => {
+        updateMusicButtonState(true);
+    }).catch(() => {
+        // Autoplay blocked by browser policy until interaction
+        // Listen to ANY interaction anywhere on the document/window
+        const onFirstInteraction = () => {
+            if (!isPlaying && birthdayAudio) {
+                birthdayAudio.play().then(() => {
+                    updateMusicButtonState(true);
+                }).catch(e => console.log('Audio error:', e));
+            }
+            ['click', 'touchstart', 'touchend', 'mousedown', 'keydown', 'scroll'].forEach(evt => {
+                window.removeEventListener(evt, onFirstInteraction);
+                document.removeEventListener(evt, onFirstInteraction);
+            });
+        };
+        ['click', 'touchstart', 'touchend', 'mousedown', 'keydown', 'scroll'].forEach(evt => {
+            window.addEventListener(evt, onFirstInteraction, { passive: true });
+            document.addEventListener(evt, onFirstInteraction, { passive: true });
+        });
+    });
+}
 
-birthdayAudio.addEventListener('ended', () => {
-});
+// Attempt immediate autoplay on script load
+tryAutoPlayMusic();
 
-birthdayAudio.addEventListener('error', (e) => {
-    musicControl.style.display = 'none';
-});
+if (musicControl) {
+    musicControl.addEventListener('click', toggleMusic);
+}
+
+if (birthdayAudio) {
+    birthdayAudio.addEventListener('play', () => updateMusicButtonState(true));
+    birthdayAudio.addEventListener('pause', () => updateMusicButtonState(false));
+    birthdayAudio.addEventListener('ended', () => updateMusicButtonState(false));
+    birthdayAudio.addEventListener('error', (e) => {
+        if (musicControl) musicControl.style.display = 'none';
+    });
+}
 
 document.addEventListener('visibilitychange', () => {
-    if (document.hidden && isPlaying) {
+    if (document.hidden && isPlaying && birthdayAudio) {
         birthdayAudio.pause();
     }
 });
