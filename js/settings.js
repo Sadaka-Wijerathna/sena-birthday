@@ -4,7 +4,7 @@ const closeModal = document.querySelector('.close');
 let pages = [];
 const applySettingsButton = document.getElementById('applySettings');
 let settings = {
-    music: './media/happybirtday_uia.mp3',
+    music: './media/hbdmusic1.mp3',
     countdown: 3,
     matrixText: 'HAPPYBIRTHDAY',
     matrixColor1: '#ff69b4', // Màu pink mẫu
@@ -380,7 +380,7 @@ function resetWebsiteState() {
 function initializeDefaultSettings() {
 
     window.settings = {
-        music: './media/happybirtday_uia.mp3',
+        music: './media/hbdmusic1.mp3',
         countdown: 3,
         matrixText: 'HAPPYBIRTHDAY',
         matrixColor1: '#ff69b4', // Màu pink mẫu
